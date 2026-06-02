@@ -1,18 +1,39 @@
+import { useState } from "react";
+
 function FileUpload({ theme }) {
-  const containerClass =
-    theme === "dark"
-      ? "bg-slate-900 text-slate-100 p-6 rounded-xl shadow"
-      : "bg-white text-slate-900 p-6 rounded-xl shadow";
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
 
   return (
-    <div className={containerClass}>
-      <h2 className="text-xl font-semibold mb-4">
+    <div className={`file-upload p-6 rounded-xl shadow ${theme === 'dark' ? 'bg-slate-900' : 'bg-white'}`}>
+      <h2 className={`upload-title text-xl font-semibold mb-4 ${theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
         Upload Document
       </h2>
 
-      <button className="bg-blue-600 text-white px-4 py-2 rounded-lg"> drag and drop or
-        Upload PDF
-      </button>
+      <input
+        type="file"
+        accept=".pdf"
+        onChange={handleFileChange}
+      />
+
+      {file && (
+        <>
+          <p className="mt-4 text-green-600">
+            Selected: {file.name}
+          </p>
+
+          <p>
+            Size: {(file.size / 1024).toFixed(2)} KB
+          </p>
+
+          <p>
+            Type: {file.type}
+          </p>
+        </>
+      )}
     </div>
   );
 }

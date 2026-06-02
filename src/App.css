@@ -190,3 +190,18 @@
 [data-theme="dark"] .theme-switcher {
   border-color: rgba(148, 163, 184, 0.25);
 }
+
+/* File upload card styling to ensure contrast in dark mode */
+.file-upload {
+  background: var(--card-bg, #ffffff);
+  color: var(--text, #0f172a);
+}
+
+[data-theme="dark"] .file-upload {
+  background: #0b1220;
+  color: #e6eef8;
+}
+
+[data-theme="dark"] .file-upload .upload-title {
+  color: #ffffff;
+}

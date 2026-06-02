@@ -182,3 +182,11 @@
     border-right-color: var(--border);
   }
 }
+
+.theme-switcher {
+  min-width: 96px;
+}
+
+[data-theme="dark"] .theme-switcher {
+  border-color: rgba(148, 163, 184, 0.25);
+}

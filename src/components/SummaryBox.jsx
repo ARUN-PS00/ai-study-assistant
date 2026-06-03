@@ -7,7 +7,7 @@ function SummaryBox({ theme }) {
   return (
     <div className={containerClass}>
       <h2 className="text-xl font-semibold mb-4">
-        Summary
+        📝Summary
       </h2>
 
       <p className={theme === "dark" ? "text-slate-300" : "text-slate-600"}>

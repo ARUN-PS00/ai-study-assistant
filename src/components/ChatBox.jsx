@@ -17,7 +17,7 @@ function ChatBox({ theme }) {
   return (
     <div className={containerClass}>
       <h2 className="text-xl font-semibold mb-4">
-        Chat Assistant
+         🤖Chat Assistant
       </h2>
 
       <div className={`${panelClass} flex flex-col justify-between`}

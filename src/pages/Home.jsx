@@ -22,7 +22,28 @@ function Home({ theme, onToggleTheme }) {
             Upload your notes and learn interactively with AI.
           </p>
         </div>
+          <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow">
+    <h3 className="text-lg font-semibold">
+      📚 Documents Uploaded
+    </h3>
+    <p className="text-3xl font-bold mt-2">0</p>
+  </div>
 
+  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow">
+    <h3 className="text-lg font-semibold">
+      📝 Summaries Generated
+    </h3>
+    <p className="text-3xl font-bold mt-2">0</p>
+  </div>
+
+  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow">
+    <h3 className="text-lg font-semibold">
+      💬 Questions Asked
+    </h3>
+    <p className="text-3xl font-bold mt-2">0</p>
+  </div>
+</section> 
         <FileUpload theme={theme} />
         <SummaryBox theme={theme} />
         <ChatBox theme={theme} />

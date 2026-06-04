@@ -1,10 +1,18 @@
-import Navbar from "../components/Navbar";
+import StudyHistory from "../components/StudyHistory";
 import FileUpload from "../components/FileUpload";
 import SummaryBox from "../components/SummaryBox";
 import ChatBox from "../components/ChatBox";
 import { useState } from "react";
 
-function Home({ theme, onToggleTheme }) {
+function Home({
+  theme,
+  onToggleTheme,
+  currentPage,
+  setCurrentPage,
+}) {
+  const [documentCount, setDocumentCount] = useState(0);
+  const [summaryCount, setSummaryCount] = useState(0);
+  const [questionCount, setQuestionCount] = useState(0);
   const [showTools, setShowTools] = useState(false);
   return (
     <div
@@ -14,7 +22,7 @@ function Home({ theme, onToggleTheme }) {
           : "min-h-screen bg-slate-100 text-slate-900"
       }
     >
-      <Navbar theme={theme} onToggleTheme={onToggleTheme} />
+      
 
       <div className="max-w-5xl mx-auto p-6 space-y-6">
         <div>
@@ -30,7 +38,7 @@ function Home({ theme, onToggleTheme }) {
   📚 Documents Uploaded
 </h3>
     <p className="text-3xl font-bold mt-2 text-slate-900 dark:text-white">
-  0
+  {documentCount}
 </p>
   </div>
 
@@ -39,7 +47,7 @@ function Home({ theme, onToggleTheme }) {
       📝 Summaries Generated
     </h3>
     <p className="text-3xl font-bold mt-2 text-slate-900 dark:text-white">
-  0
+  {summaryCount}
 </p>
   </div>
 
@@ -48,13 +56,22 @@ function Home({ theme, onToggleTheme }) {
   💬 Questions Asked
 </h3>
     <p className="text-3xl font-bold mt-2 text-slate-900 dark:text-white">
-  0
+  {questionCount}
 </p>
   </div>
 </section> 
-        <FileUpload theme={theme} />
-        <SummaryBox theme={theme} />
-        <ChatBox theme={theme} />
+        <FileUpload
+  theme={theme}
+  setDocumentCount={setDocumentCount}
+/>
+        <SummaryBox
+  theme={theme}
+  setSummaryCount={setSummaryCount}
+/>
+        <ChatBox
+  theme={theme}
+  setQuestionCount={setQuestionCount}
+/>
         <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow mt-6 text-slate-900 dark:text-white">
           <h2 className="text-xl font-semibold mb-4 text-slate-900 dark:text-white">
   Study Tools
@@ -103,7 +120,9 @@ function Home({ theme, onToggleTheme }) {
     </button>
 
   </div>
+  
 )}
+<StudyHistory />
 
 </div>
 </div>

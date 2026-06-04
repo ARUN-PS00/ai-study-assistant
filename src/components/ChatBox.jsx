@@ -1,4 +1,4 @@
-function ChatBox({ theme }) {
+function ChatBox({ theme, setQuestionCount }) {
   const containerClass =
     theme === "dark"
       ? "bg-slate-900 text-slate-100 p-6 rounded-xl shadow"
@@ -36,9 +36,14 @@ function ChatBox({ theme }) {
               placeholder="Ask a question..."
               className={inputClass}
             />
-            <button className="rounded-full bg-sky-600 px-5 py-2 text-white shadow-sm transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500">
-              Send
-            </button>
+            <button
+  onClick={() => {
+    setQuestionCount((count) => count + 1);
+  }}
+  className="rounded-full bg-sky-600 px-5 py-2 text-white shadow-sm transition hover:bg-sky-700"
+>
+  Send
+</button>
           </div>
         </div>
       </div>

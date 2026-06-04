@@ -55,8 +55,8 @@ function Home({ theme, onToggleTheme }) {
         <FileUpload theme={theme} />
         <SummaryBox theme={theme} />
         <ChatBox theme={theme} />
-        <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow mt-6">
-          <h2 className="text-xl font-semibold mb-4">
+        <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow mt-6 text-slate-900 dark:text-white">
+          <h2 className="text-xl font-semibold mb-4 text-slate-900 dark:text-white">
   Study Tools
 </h2>
 
@@ -72,32 +72,33 @@ function Home({ theme, onToggleTheme }) {
   <div className="mt-4 space-y-2">
 
     
-<button className="w-full bg-slate-200 dark:bg-slate-700 px-4 py-3 rounded-lg text-left hover:bg-slate-300 dark:hover:bg-slate-600 transition">
+    <button className="w-full bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white px-4 py-3 rounded-lg text-left hover:bg-slate-300 dark:hover:bg-slate-600 transition">
       Generate Quiz
     </button>
+      
 
-    <button className="w-full bg-slate-200 dark:bg-slate-700 px-4 py-3 rounded-lg text-left hover:bg-slate-300 dark:hover:bg-slate-600 transition">
+    <button className="w-full bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white px-4 py-3 rounded-lg text-left hover:bg-slate-300 dark:hover:bg-slate-600 transition">
       Viva Questions
     </button>
 
-    <button className="w-full bg-slate-200 dark:bg-slate-700 px-4 py-3 rounded-lg text-left hover:bg-slate-300 dark:hover:bg-slate-600 transition">
+    <button className="w-full bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white px-4 py-3 rounded-lg text-left hover:bg-slate-300 dark:hover:bg-slate-600 transition">
       Flashcards
     </button>
 
-    <button className="w-full bg-slate-200 dark:bg-slate-700 px-4 py-3 rounded-lg text-left hover:bg-slate-300 dark:hover:bg-slate-600 transition">
+    <button className="w-full bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white px-4 py-3 rounded-lg text-left hover:bg-slate-300 dark:hover:bg-slate-600 transition">
       Revision Notes
     </button>
 
-    <button className="w-full bg-slate-200 dark:bg-slate-700 px-4 py-3 rounded-lg text-left hover:bg-slate-300 dark:hover:bg-slate-600 transition">
+    <button className="w-full bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white px-4 py-3 rounded-lg text-left hover:bg-slate-300 dark:hover:bg-slate-600 transition">
       Key Topics
     </button>
 
     
-    <button className="w-full bg-slate-200 dark:bg-slate-700 px-4 py-3 rounded-lg text-left hover:bg-slate-300 dark:hover:bg-slate-600 transition">
+    <button className="w-full bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white px-4 py-3 rounded-lg text-left hover:bg-slate-300 dark:hover:bg-slate-600 transition">
       Explain Difficult Concepts
     </button>
 
-    <button className="w-full bg-slate-200 dark:bg-slate-700 px-4 py-3 rounded-lg text-left">
+    <button className="w-full bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-white px-4 py-3 rounded-lg text-left hover:bg-slate-300 dark:hover:bg-slate-600 transition">
       Important Exam Questions
     </button>
 

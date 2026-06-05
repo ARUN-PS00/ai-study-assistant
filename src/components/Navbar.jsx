@@ -1,4 +1,10 @@
-export default function Navbar({ theme, onToggleTheme }) {
+
+export default function Navbar({
+  theme,
+  onToggleTheme,
+  currentPage,
+  setCurrentPage,
+}) {
   const buttonClasses =
     theme === "dark"
       ? "theme-switcher inline-flex items-center justify-center rounded-full border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 shadow-sm transition hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-400"
@@ -11,7 +17,30 @@ export default function Navbar({ theme, onToggleTheme }) {
 
   return (
     <nav className={navClasses}>
-      <h1 className="text-xl font-semibold">AI Study Assistant</h1>
+      <div className="flex items-center gap-4">
+  <h1 className="text-xl font-semibold">AI Study Assistant</h1>
+
+  <button
+    onClick={() => setCurrentPage("home")}
+    className="px-3 py-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700"
+  >
+    Home
+  </button>
+
+  <button
+    onClick={() => setCurrentPage("profile")}
+    className="px-3 py-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700"
+  >
+    Profile
+  </button>
+
+  <button
+    onClick={() => setCurrentPage("settings")}
+    className="px-3 py-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700"
+  >
+    Settings
+  </button>
+</div>
       <button
         type="button"
         onClick={onToggleTheme}

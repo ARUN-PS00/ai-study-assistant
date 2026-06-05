@@ -1,5 +1,8 @@
+import Navbar from "./components/Navbar";
 import { useEffect, useState } from "react";
 import Home from "./pages/Home";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 
 function App() {
   const [theme, setTheme] = useState(() => {
@@ -8,6 +11,7 @@ function App() {
     }
     return window.localStorage.getItem("theme") || "light";
   });
+  const [currentPage, setCurrentPage] = useState("home");
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -18,7 +22,29 @@ function App() {
     setTheme((current) => (current === "dark" ? "light" : "dark"));
   };
 
-  return <Home theme={theme} onToggleTheme={toggleTheme} />;
+ return (
+  <>
+    <Navbar
+      theme={theme}
+      onToggleTheme={toggleTheme}
+      currentPage={currentPage}
+      setCurrentPage={setCurrentPage}
+    />
+
+    {currentPage === "home" && (
+      <Home
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
+    )}
+
+    {currentPage === "profile" && <Profile />}
+
+    {currentPage === "settings" && <Settings />}
+  </>
+);
 }
 
 export default App;

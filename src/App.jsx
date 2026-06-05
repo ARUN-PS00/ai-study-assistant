@@ -1,8 +1,11 @@
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import Navbar from "./components/Navbar";
 import { useEffect, useState } from "react";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+
 
 function App() {
   const [theme, setTheme] = useState(() => {
@@ -43,6 +46,9 @@ function App() {
     {currentPage === "profile" && <Profile />}
 
     {currentPage === "settings" && <Settings />}
+    {currentPage === "login" && <Login />}
+
+{currentPage === "signup" && <Signup />}
   </>
 );
 }

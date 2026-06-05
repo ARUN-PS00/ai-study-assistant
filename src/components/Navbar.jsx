@@ -40,6 +40,19 @@ export default function Navbar({
   >
     Settings
   </button>
+  <button
+  onClick={() => setCurrentPage("login")}
+  className="px-3 py-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700"
+>
+  Login
+</button>
+
+<button
+  onClick={() => setCurrentPage("signup")}
+  className="px-3 py-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700"
+>
+  Signup
+</button>
 </div>
       <button
         type="button"

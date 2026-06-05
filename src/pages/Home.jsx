@@ -4,15 +4,13 @@ import SummaryBox from "../components/SummaryBox";
 import ChatBox from "../components/ChatBox";
 import { useState } from "react";
 
-function Home({
-  theme,
-  onToggleTheme,
-  currentPage,
-  setCurrentPage,
-}) {
+
+
+function Home({ theme }) {
   const [documentCount, setDocumentCount] = useState(0);
   const [summaryCount, setSummaryCount] = useState(0);
   const [questionCount, setQuestionCount] = useState(0);
+  const [documentText, setDocumentText] = useState("");
   const [showTools, setShowTools] = useState(false);
   return (
     <div
@@ -61,17 +59,20 @@ function Home({
   </div>
 </section> 
         <FileUpload
-  theme={theme}
-  setDocumentCount={setDocumentCount}
-/>
+          theme={theme}
+          setDocumentCount={setDocumentCount}
+          setDocumentText={setDocumentText}
+        />
         <SummaryBox
-  theme={theme}
-  setSummaryCount={setSummaryCount}
-/>
+          theme={theme}
+          setSummaryCount={setSummaryCount}
+          documentText={documentText}
+        />
         <ChatBox
-  theme={theme}
-  setQuestionCount={setQuestionCount}
-/>
+          theme={theme}
+          setQuestionCount={setQuestionCount}
+          documentText={documentText}
+        />
         <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow mt-6 text-slate-900 dark:text-white">
           <h2 className="text-xl font-semibold mb-4 text-slate-900 dark:text-white">
   Study Tools

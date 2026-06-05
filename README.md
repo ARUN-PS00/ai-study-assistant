@@ -31,6 +31,13 @@ To transform static study materials into an interactive learning experience usin
 
 ### AI Integration
 - OpenAI API (or equivalent LLM)
+- Gemini via Google Generative AI client
+
+## Environment Setup
+
+1. Copy `.env.example` to `.env`
+2. Fill in your Firebase credentials
+3. Add your Gemini API key to `VITE_GEMINI_API_KEY`
 
 ## Project Structure
 

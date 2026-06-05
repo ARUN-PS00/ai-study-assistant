@@ -16,7 +16,31 @@ const [messages, setMessages] = useState([]);
     theme === "dark"
       ? "w-full min-w-0 rounded-xl border border-slate-600 bg-slate-950/70 px-4 py-3 text-slate-100 placeholder-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/30"
       : "w-full min-w-0 rounded-xl border border-slate-200 bg-white/90 px-4 py-3 text-slate-900 placeholder-slate-500 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/30";
+const handleSend = () => {
+  if (!message.trim()) return;
 
+  let aiReply = "AI: I received your question.";
+
+  if (message.toLowerCase().includes("dbms")) {
+    aiReply =
+      "AI: DBMS stands for Database Management System.";
+  } else if (message.toLowerCase().includes("sql")) {
+    aiReply =
+      "AI: SQL stands for Structured Query Language.";
+  } else if (message.toLowerCase().includes("react")) {
+    aiReply =
+      "AI: React is a JavaScript library for building user interfaces.";
+  }
+
+  setMessages([
+    ...messages,
+    `You: ${message}`,
+    aiReply,
+  ]);
+
+  setMessage("");
+  setQuestionCount((count) => count + 1);
+};
   return (
     <div className={containerClass}>
       <h2 className="text-xl font-semibold mb-4">
@@ -34,13 +58,21 @@ const [messages, setMessages] = useState([]);
   {messages.map((msg, index) => (
   <div
     key={index}
-    className={`rounded-xl p-3 text-white ${
+    className={`flex ${
       msg.startsWith("AI:")
-        ? "bg-slate-700"
-        : "bg-sky-600"
+        ? "justify-start"
+        : "justify-end"
     }`}
   >
-    {msg}
+    <div
+      className={`rounded-xl p-3 text-white max-w-[80%] ${
+        msg.startsWith("AI:")
+          ? "bg-slate-700"
+          : "bg-sky-600"
+      }`}
+    >
+      {msg}
+    </div>
   </div>
 ))}
 </div>
@@ -52,6 +84,11 @@ const [messages, setMessages] = useState([]);
   placeholder="Ask a question..."
   value={message}
   onChange={(e) => setMessage(e.target.value)}
+  onKeyDown={(e) => {
+  if (e.key === "Enter") {
+    handleSend();
+  }
+}}
   className={inputClass}
 />
               

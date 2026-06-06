@@ -1,7 +1,7 @@
 import { useAuth } from "../context/AuthContext";
 
 function Profile({ setCurrentPage }) {
-  const { logout } = useAuth();
+  const { currentUser, logout } = useAuth();
 
   const handleLogout = async () => {
     console.log("handleLogout called");
@@ -28,26 +28,33 @@ function Profile({ setCurrentPage }) {
         <div className="space-y-3">
 
           <p className="text-slate-900 dark:text-white">
-            Name: Elsa Jojo
+            Name: {currentUser?.displayName || "User"}
           </p>
 
           <p className="text-slate-900 dark:text-white">
-            Email: elsa@example.com
+            Email: {currentUser?.email}
           </p>
 
-          <p className="text-slate-900 dark:text-white">
-            Documents Uploaded: 5
-          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
 
-          <p className="text-slate-900 dark:text-white">
-            Summaries Generated: 12
-          </p>
+  <div className="bg-slate-700 p-4 rounded-lg text-center">
+    <h3 className="text-2xl font-bold text-white">5</h3>
+    <p className="text-white">Documents</p>
+  </div>
 
-          <p className="text-slate-900 dark:text-white">
-            Questions Asked: 34
-          </p>
+  <div className="bg-slate-700 p-4 rounded-lg text-center">
+    <h3 className="text-2xl font-bold text-white">12</h3>
+    <p className="text-white">Summaries</p>
+  </div>
 
-          <div className="mt-4">
+  <div className="bg-slate-700 p-4 rounded-lg text-center">
+    <h3 className="text-2xl font-bold text-white">34</h3>
+    <p className="text-white">Questions</p>
+  </div>
+
+</div>
+
+          <div className="mt-6 flex justify-end">
             <button
               onClick={handleLogout}
               className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"

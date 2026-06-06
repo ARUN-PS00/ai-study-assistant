@@ -49,8 +49,14 @@ function ChatBox({ theme, setQuestionCount, documentText }) {
     setIsLoading(true);
     setTypingDots("");
 
+    const textToUse = documentText.slice(0, 12000);
+    const truncatedNote =
+      documentText.length > 12000
+        ? "The document has been trimmed to fit the model's request size."
+        : "";
+
     const prompt = documentText
-      ? `Use the following uploaded document as context. If the answer is not contained in the document, answer based on your knowledge.\n\nDocument content:\n${documentText}\n\nQuestion: ${userMessage}`
+      ? `Use the following uploaded document as context. ${truncatedNote}\n\nDocument content:\n${textToUse}\n\nQuestion: ${userMessage}`
       : userMessage;
 
     const aiText = await askAI(prompt);

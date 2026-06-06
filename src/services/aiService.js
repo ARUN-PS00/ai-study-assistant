@@ -1,30 +1,57 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(
-  import.meta.env.VITE_GEMINI_API_KEY
-);
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+const defaultModel = import.meta.env.VITE_GEMINI_MODEL || "gemini-1.0";
+const fallbackModel = defaultModel === "gemini-1.0" ? "gemini-1.5" : "gemini-1.0";
 
-const model = genAI.getGenerativeModel({
-  model: "gemini-2.5-flash",
-});
+if (!apiKey) {
+  console.error("Gemini API key is missing. Set VITE_GEMINI_API_KEY in .env.");
+}
 
-//temp
-console.log(import.meta.env.VITE_GEMINI_API_KEY);
+const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 
+const getModel = (modelName) => {
+  if (!genAI) {
+    throw new Error("Gemini API key is required to create a model.");
+  }
+  return genAI.getGenerativeModel({ model: modelName });
+};
 
+const formatErrorMessage = (error) => {
+  const message = error?.message || "Unable to reach Gemini.";
+  if (error?.status === 429) {
+    return `Sorry, I couldn't generate a response due to API quota limits. ${message}`;
+  }
+  return `Sorry, I couldn't generate a response. ${message}`;
+};
+
+const tryGenerate = async (modelName, message) => {
+  const model = getModel(modelName);
+  const result = await model.generateContent(message);
+  return result.response.text();
+};
 
 export const askAI = async (message) => {
-  if (!import.meta.env.VITE_GEMINI_API_KEY) {
-    console.error("Gemini API key is missing. Set VITE_GEMINI_API_KEY in .env.");
+  if (!apiKey) {
     return "The Gemini API key is not configured.";
   }
 
   try {
-    const result = await model.generateContent(message);
-    return await result.response.text();
+    return await tryGenerate(defaultModel, message);
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "Sorry, I couldn't generate a response.";
+
+    if (error?.status === 429 && fallbackModel !== defaultModel) {
+      try {
+        console.warn(`Retrying Gemini call with fallback model ${fallbackModel}`);
+        return await tryGenerate(fallbackModel, message);
+      } catch (fallbackError) {
+        console.error("Gemini fallback error:", fallbackError);
+        return formatErrorMessage(fallbackError);
+      }
+    }
+
+    return formatErrorMessage(error);
   }
 };
 

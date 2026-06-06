@@ -2,16 +2,17 @@ import { useState } from "react";
 import { signup } from "../services/authService";
 
 function Signup({ setCurrentPage }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [name, setName] = useState("");
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const [error, setError] = useState("");
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      await signup(email, password);
+     await signup(name, email, password);
       if (setCurrentPage) setCurrentPage("home");
     } catch (err) {
       setError(err.message || "Signup failed");
@@ -25,7 +26,18 @@ function Signup({ setCurrentPage }) {
 
         {error && <div className="text-red-500 text-sm mb-3">{error}</div>}
 
-        <form onSubmit={handleSignup} className="space-y-4">
+      <form onSubmit={handleSignup} className="space-y-4">
+          <div className="flex items-center bg-slate-800/60 rounded">
+  <span className="px-4 text-slate-200">🧑</span>
+  <input
+    className="w-full px-4 py-3 rounded-r bg-transparent text-white placeholder-slate-300"
+    type="text"
+    placeholder="Full Name"
+    value={name}
+    onChange={(e) => setName(e.target.value)}
+    required
+  />
+</div>
           <div className="flex items-center bg-slate-800/60 rounded">
             <span className="px-4 text-slate-200">👤</span>
             <input

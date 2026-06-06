@@ -28,13 +28,19 @@ function SummaryBox({ theme, setSummaryCount, documentText }) {
           setSummary("Generating summary...");
           setIsLoading(true);
 
-          const textToSummarize = documentText.slice(0, 12000);
-          const prompt = `Summarize the following study document into a concise overview with key points and main concepts. Do not include markdown headings.\n\n${textToSummarize}`;
-          const aiSummary = await askAI(prompt);
+          try {
+            const textToSummarize = documentText.slice(0, 12000);
+            const prompt = `Summarize the following study document into a concise overview with key points and main concepts. Do not include markdown headings.\n\n${textToSummarize}`;
+            const aiSummary = await askAI(prompt);
 
-          setSummary(aiSummary);
-          setSummaryCount((count) => count + 1);
-          setIsLoading(false);
+            setSummary(aiSummary);
+            setSummaryCount((count) => count + 1);
+          } catch (aiError) {
+            setSummary("");
+            setError(aiError?.message || "Sorry, I couldn't generate a response.");
+          } finally {
+            setIsLoading(false);
+          }
         }}
         disabled={isLoading}
         className="bg-green-600 disabled:bg-slate-500 text-white px-4 py-2 rounded mb-4"

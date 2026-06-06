@@ -1,4 +1,6 @@
+import { useState } from "react";
 function Settings() {
+  const [notifications, setNotifications] = useState(true);
   return (
     <div className="p-6">
       <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow">
@@ -6,21 +8,41 @@ function Settings() {
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
           Settings
         </h1>
+        <div className="space-y-4">
 
-        <div className="space-y-3">
+          <div className="flex justify-between items-center">
+            <span className="text-slate-900 dark:text-white">
+              Theme
+            </span>
+            <span className="text-green-500 font-semibold">
+              Dark Mode
+            </span>
+          </div>
 
-          <p className="text-slate-900 dark:text-white">
-            Theme: Dark Mode
-          </p>
+          <div className="flex justify-between items-center">
+            <span className="text-slate-900 dark:text-white">
+              Notifications
+            </span>
 
-          <p className="text-slate-900 dark:text-white">
-            Notifications: On
-          </p>
+            <button
+              onClick={() => setNotifications(!notifications)}
+              className={`px-4 py-1 rounded-lg text-white ${
+                notifications ? "bg-green-500" : "bg-red-500"
+              }`}
+            >
+              {notifications ? "On" : "Off"}
+            </button>
+          </div>
 
-          <p className="text-slate-900 dark:text-white">
-            Language: English
-          </p>
-s
+          <div className="flex justify-between items-center">
+            <span className="text-slate-900 dark:text-white">
+              Language
+            </span>
+            <span className="text-green-500 font-semibold">
+              English
+            </span>
+          </div>
+
         </div>
 
       </div>

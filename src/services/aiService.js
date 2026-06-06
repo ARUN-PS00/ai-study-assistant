@@ -55,6 +55,13 @@ export const askAI = async (message) => {
   }
 };
 
+/**
+ * Legacy function - use sendToGemini instead
+ */
+export const askAI = async (message, documentText = "") => {
+  return sendToGemini(message, documentText);
+};
+
 
 
 

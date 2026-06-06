@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 
 import {
@@ -11,21 +12,26 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
-export const signup = async (email, password) => {
+export const signup = async (name, email, password) => {
   const userCredential =
-    await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+  await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
+
+await updateProfile(userCredential.user, {
+  displayName: name,
+});
 
   await setDoc(
     doc(db, "users", userCredential.user.uid),
     {
-      email,
-      createdAt: serverTimestamp(),
-      role: "student",
-    }
+  name,
+  email,
+  createdAt: serverTimestamp(),
+  role: "student",
+}
   );
 
   return userCredential;

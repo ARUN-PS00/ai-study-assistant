@@ -1,12 +1,15 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-const defaultModel = import.meta.env.VITE_GEMINI_MODEL || "gemini-1.0";
-const fallbackModel = defaultModel === "gemini-1.0" ? "gemini-1.5" : "gemini-1.0";
+const defaultModel =
+  import.meta.env.VITE_GEMINI_MODEL || "gemini-2.5-flash";
+
+const fallbackModel = "gemini-2.5-flash";
 
 if (!apiKey) {
   console.error("Gemini API key is missing. Set VITE_GEMINI_API_KEY in .env.");
 }
+
 
 const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 
@@ -51,17 +54,10 @@ export const askAI = async (message) => {
       }
     }
 
-    return formatErrorMessage(error);
+    if (error?.message?.includes("404")) {
+  return "Gemini model configuration is invalid. Check VITE_GEMINI_MODEL.";
+}
+
+return formatErrorMessage(error);
   }
 };
-
-/**
- * Legacy function - use sendToGemini instead
- */
-export const askAI = async (message, documentText = "") => {
-  return sendToGemini(message, documentText);
-};
-
-
-
-

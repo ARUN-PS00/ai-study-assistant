@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf";
+import { useAuth } from "../context/AuthContext";
+import { saveDocumentMetadata } from "../services/documentservice";
 
 const basePath =
   import.meta.env.BASE_URL ||
@@ -16,6 +18,7 @@ GlobalWorkerOptions.workerSrc = workerSrc;
 
 function FileUpload(props) {
   const theme = props.theme || "light";
+  const { currentUser } = useAuth();
   const setDocumentCount = props.setDocumentCount;
   const setDocumentText = props.setDocumentText || (() => {});
   const [file, setFile] = useState(null);
@@ -60,7 +63,20 @@ function FileUpload(props) {
           extractedText += `${pageText}\n\n`;
         }
 
-        setDocumentText(extractedText.trim());
+        const documentText = extractedText.trim();
+        setDocumentText(documentText);
+
+        if (currentUser?.uid) {
+          const textLength = documentText.length;
+          try {
+            await saveDocumentMetadata(currentUser.uid, selectedFile, textLength);
+          } catch (saveError) {
+            console.error("Failed to save PDF metadata:", saveError);
+          }
+        } else {
+          console.warn("No authenticated user available to save PDF metadata.");
+        }
+
         isDone = true;
         setProgress(100);
       } catch (parseError) {

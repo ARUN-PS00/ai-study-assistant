@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { sendToGemini } from "../services/aiService";
+import { askAI } from "../services/aiService";
+import { auth } from "../firebase/firebase";
+import { saveChat } from "../services/chatService";
 
 function ChatBoxNew({ theme, documentText }) {
   const [messages, setMessages] = useState([
@@ -73,7 +75,69 @@ function ChatBoxNew({ theme, documentText }) {
       console.log("Sending to Gemini - Document length:", documentText.length);
       console.log("User prompt:", prompt);
 
-      const aiResponse = await sendToGemini(prompt, documentText);
+      // Local dictionary to capture casual small talk without burning API tokens
+      const casualResponses = {
+        hi: "👋 Hi! Upload a PDF and I'll help you study it.",
+        hai: "👋 Hi! Upload a PDF and let's get started.",
+        hello: "👋 Hello! Ready to study?",
+        hey: "👋 Hey there!",
+        thanks: "😊 You're welcome!",
+        "thank you": "😊 Happy to help!",
+        great: "🎉 Glad it helped!",
+        awesome: "🚀 Awesome!",
+        ok: "👍 Okay!",
+        okay: "👍 Okay!",
+        cool: "😎 Cool!",
+        nice: "😊 Nice!",
+        good: "👍 Great!",
+        wow: "🤩 Glad you liked it!",
+        bye: "👋 Bye! See you later!",
+        goodbye: "👋 Goodbye!",
+        help: "📚 Upload a PDF and ask questions about it.",
+      };
+
+      const normalized = prompt.toLowerCase().trim();
+
+      // Intercept short casual messages right here
+      if (casualResponses[normalized]) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now(),
+            type: "ai",
+            text: casualResponses[normalized],
+          },
+        ]);
+        setIsLoading(false);
+        return;
+      }
+
+      // Build out context structure for actual study requests
+      const fullPrompt = `
+You are an AI Study Assistant.
+
+Answer ONLY using the uploaded document.
+
+If the answer is not found in the document, reply:
+"Information not found in uploaded notes."
+
+Document:
+${documentText}
+
+Question:
+${prompt}
+`;
+
+      const aiResponse = await askAI(fullPrompt);
+
+      // Save chat history securely to Firestore if user is logged in
+      if (auth.currentUser) {
+        await saveChat(
+          auth.currentUser.uid,
+          prompt,
+          aiResponse
+        );
+      }
 
       // Add AI response
       setMessages((prev) => [

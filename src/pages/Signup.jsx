@@ -1,20 +1,36 @@
 import { useState } from "react";
 import { signup } from "../services/authService";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase/firebase";
 
 function Signup({ setCurrentPage }) {
   const [name, setName] = useState("");
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
-const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-     await signup(name, email, password);
+      // 1. Call your existing auth service to create the user in Firebase Auth
+      const userCredential = await signup(name, email, password);
+      const user = userCredential.user;
+
+      // 2. Automatically save the user profile and initial dark theme preference to Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        name,
+        email,
+        role: "student",
+        theme: "dark",
+        createdAt: serverTimestamp(),
+      });
+
+      // 3. Redirect to home page if successful
       if (setCurrentPage) setCurrentPage("home");
     } catch (err) {
+      console.error("Signup error:", err);
       setError(err.message || "Signup failed");
     }
   };
@@ -26,18 +42,21 @@ const [error, setError] = useState("");
 
         {error && <div className="text-red-500 text-sm mb-3">{error}</div>}
 
-      <form onSubmit={handleSignup} className="space-y-4">
+        <form onSubmit={handleSignup} className="space-y-4">
+          {/* Full Name Field */}
           <div className="flex items-center bg-slate-800/60 rounded">
-  <span className="px-4 text-slate-200">🧑</span>
-  <input
-    className="w-full px-4 py-3 rounded-r bg-transparent text-white placeholder-slate-300"
-    type="text"
-    placeholder="Full Name"
-    value={name}
-    onChange={(e) => setName(e.target.value)}
-    required
-  />
-</div>
+            <span className="px-4 text-slate-200">🧑</span>
+            <input
+              className="w-full px-4 py-3 rounded-r bg-transparent text-white placeholder-slate-300"
+              type="text"
+              placeholder="Full Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* Email Field */}
           <div className="flex items-center bg-slate-800/60 rounded">
             <span className="px-4 text-slate-200">👤</span>
             <input
@@ -50,6 +69,7 @@ const [error, setError] = useState("");
             />
           </div>
 
+          {/* Password Field */}
           <div className="flex items-center bg-slate-800/60 rounded">
             <span className="px-4 text-slate-200">🔒</span>
             <input

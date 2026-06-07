@@ -20,19 +20,19 @@ function ChatBoxNew({ theme, documentText }) {
   const studyTools = [
     {
       label: "Summarize",
-      prompt: "Create a detailed summary of the following study material with key points and main concepts.",
+      prompt: "Create a detailed summary of the study material with key points and main concepts.",
     },
     {
       label: "Generate Quiz",
-      prompt: "Generate 10 multiple choice questions (MCQs) from the following study material. Format: Q1. Question?\nA) Option\nB) Option\nC) Option\nD) Option\nCorrect: A",
+      prompt: "Generate 10 multiple choice questions (MCQs) from the study material. Format: Q1. Question?\nA) Option\nB) Option\nC) Option\nD) Option\nCorrect: A",
     },
     {
       label: "Flashcards",
-      prompt: "Generate 10 flashcards from the following study material. Format each as:\nQ: Question\nA: Answer",
+      prompt: "Generate 10 flashcards from the study material. Format each as:\nQ: Question\nA: Answer",
     },
     {
       label: "Viva Questions",
-      prompt: "Generate 10 viva/interview questions from the following study material with brief expected answers.",
+      prompt: "Generate 10 viva/interview questions from the study material with brief expected answers.",
     },
   ];
 
@@ -50,15 +50,10 @@ function ChatBoxNew({ theme, documentText }) {
       return;
     }
 
-    if (!documentText || !documentText.trim()) {
-      setError("Please upload a PDF document first.");
-      return;
-    }
-
     setError("");
     setIsLoading(true);
 
-    // Add user message
+    // Add user message to chat UI immediately
     const userMessageId = Date.now();
     setMessages((prev) => [
       ...prev,
@@ -72,9 +67,6 @@ function ChatBoxNew({ theme, documentText }) {
     setUserInput("");
 
     try {
-      console.log("Sending to Gemini - Document length:", documentText.length);
-      console.log("User prompt:", prompt);
-
       // Local dictionary to capture casual small talk without burning API tokens
       const casualResponses = {
         hi: "👋 Hi! Upload a PDF and I'll help you study it.",
@@ -98,7 +90,7 @@ function ChatBoxNew({ theme, documentText }) {
 
       const normalized = prompt.toLowerCase().trim();
 
-      // Intercept short casual messages right here
+      // OPTIMIZATION: Intercept casual messaging BEFORE demanding a document load state
       if (casualResponses[normalized]) {
         setMessages((prev) => [
           ...prev,
@@ -112,19 +104,37 @@ function ChatBoxNew({ theme, documentText }) {
         return;
       }
 
-      // Build out context structure for actual study requests
+      // Check document text availability if it requires deep AI generation
+      if (!documentText || !documentText.trim()) {
+        setError("Please upload a PDF document first.");
+        setIsLoading(false);
+        return;
+      }
+
+      console.log("Sending to Gemini - Document length:", documentText.length);
+      console.log("User prompt:", prompt);
+
+      // System rules injected tightly onto target document context
       const fullPrompt = `
 You are an AI Study Assistant.
 
-Answer ONLY using the uploaded document.
+RULES:
+1. Answer ONLY using the uploaded document.
+2. If the answer is not found in the document, reply exactly:
+   "Information not found in uploaded notes."
+3. Keep answers concise and focused.
+4. Use bullet points where appropriate.
+5. Do not make up information.
+6. Do not use outside knowledge.
+7. For summaries, provide key points and important concepts.
+8. For quizzes, generate MCQs strictly from the document.
+9. For flashcards, create Q&A pairs from the document.
+10. For viva questions, provide short model answers.
 
-If the answer is not found in the document, reply:
-"Information not found in uploaded notes."
-
-Document:
+DOCUMENT:
 ${documentText}
 
-Question:
+QUESTION:
 ${prompt}
 `;
 

@@ -21,9 +21,17 @@ const getModel = (modelName) => {
 
 const formatErrorMessage = (error) => {
   const message = error?.message || "Unable to reach Gemini.";
+  
+  // Handle temporary high-demand/overloaded server states
+  if (error?.status === 503) {
+    return "AI is busy right now. Please try again in a few seconds.";
+  }
+  
+  // Handle rate limits and quotas
   if (error?.status === 429) {
     return `Sorry, I couldn't generate a response due to API quota limits. ${message}`;
   }
+  
   return `Sorry, I couldn't generate a response. ${message}`;
 };
 
@@ -43,6 +51,7 @@ export const askAI = async (message) => {
   } catch (error) {
     console.error("Gemini Error:", error);
 
+    // If default model hits rate limits, try the fallback model configuration
     if (error?.status === 429 && fallbackModel !== defaultModel) {
       try {
         console.warn(`Retrying Gemini call with fallback model ${fallbackModel}`);

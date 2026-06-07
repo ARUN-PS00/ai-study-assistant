@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { askAI } from "../services/aiService";
 
-function SummaryBox({ theme, setSummaryCount }) {
+function SummaryBox({ theme, setSummaryCount, documentText }) {
   const [summary, setSummary] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const containerClass =
     theme === "dark"
@@ -15,17 +18,37 @@ function SummaryBox({ theme, setSummaryCount }) {
       </h2>
 
       <button
-  onClick={() => {
-    setSummary(
-      "This document discusses important concepts and key topics for study."
-    );
+        onClick={async () => {
+          if (!documentText) {
+            setError("Upload a document first to generate a summary.");
+            return;
+          }
 
-    setSummaryCount((count) => count + 1);
-  }}
-  className="bg-green-600 text-white px-4 py-2 rounded mb-4"
->
-  Generate Summary
-</button>
+          setError("");
+          setSummary("Generating summary...");
+          setIsLoading(true);
+
+          try {
+            const textToSummarize = documentText.slice(0, 12000);
+            const prompt = `Summarize the following study document into a concise overview with key points and main concepts. Do not include markdown headings.\n\n${textToSummarize}`;
+            const aiSummary = await askAI(prompt);
+
+            setSummary(aiSummary);
+            setSummaryCount((count) => count + 1);
+          } catch (aiError) {
+            setSummary("");
+            setError(aiError?.message || "Sorry, I couldn't generate a response.");
+          } finally {
+            setIsLoading(false);
+          }
+        }}
+        disabled={isLoading}
+        className="bg-green-600 disabled:bg-slate-500 text-white px-4 py-2 rounded mb-4"
+      >
+        {isLoading ? "Generating..." : "Generate Summary"}
+      </button>
+
+      {error && <p className="text-red-500 mb-3">{error}</p>}
 
       <p className={theme === "dark" ? "text-slate-300" : "text-slate-600"}>
         {summary || "Summary will appear here..."}

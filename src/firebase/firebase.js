@@ -1,14 +1,14 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-
+console.log(import.meta.env.VITE_FIREBASE_API_KEY);
 const firebaseConfig = {
-  apiKey: "AIzaSyDruSDomVU1_jZT4JVICp4i3b27e2qXXoU",
-  authDomain: "ai-study-assistant-4cf38.firebaseapp.com",
-  projectId: "ai-study-assistant-4cf38",
-  storageBucket: "ai-study-assistant-4cf38.firebasestorage.app",
-  messagingSenderId: "338211783845",
-  appId: "1:338211783845:web:90b2cbdd1975457908394c"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);

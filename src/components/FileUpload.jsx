@@ -1,31 +1,95 @@
 import { useState } from "react";
+import { getDocument, GlobalWorkerOptions } from "pdfjs-dist/legacy/build/pdf";
+import { useAuth } from "../context/AuthContext";
+import { saveDocumentMetadata } from "../services/documentservice";
+
+const basePath =
+  import.meta.env.BASE_URL ||
+  (typeof window !== "undefined"
+    ? window.location.pathname.replace(/\/[^/]*$/, "/")
+    : "/ai-study-assistant/");
+const workerSrc =
+  typeof window !== "undefined"
+    ? `${window.location.origin}${basePath}pdf.worker.js`
+    : `${basePath}pdf.worker.js`;
+
+console.log("pdf worker src:", workerSrc);
+GlobalWorkerOptions.workerSrc = workerSrc;
 
 function FileUpload(props) {
   const theme = props.theme || "light";
+  const { currentUser } = useAuth();
   const setDocumentCount = props.setDocumentCount;
+  const setDocumentText = props.setDocumentText || (() => {});
   const [file, setFile] = useState(null);
   const [progress, setProgress] = useState(0);
+  const [error, setError] = useState("");
 
-   const handleFileChange = (e) => {
-  const selectedFile = e.target.files[0];
+  const handleFileChange = async (e) => {
+    const selectedFile = e.target.files[0];
 
-  if (selectedFile) {
-    setFile(selectedFile);
-    setDocumentCount((count) => count + 1);
-    setProgress(0);
+    if (selectedFile) {
+      setFile(selectedFile);
+      setDocumentCount((count) => count + 1);
+      setDocumentText("");
+      setError("");
+      setProgress(15);
 
-    let value = 0;
+      let isDone = false;
+      let value = 15;
+      const interval = setInterval(() => {
+        if (isDone) {
+          return;
+        }
+        value += 10;
+        setProgress(Math.min(value, 90));
+      }, 200);
 
-    const interval = setInterval(() => {
-      value += 10;
-      setProgress(value);
+      try {
+        const arrayBuffer = await selectedFile.arrayBuffer();
+        setProgress(40);
+        const loadingTask = getDocument({ data: arrayBuffer });
+        const pdf = await loadingTask.promise;
 
-      if (value >= 100) {
+        const pageCount = Math.min(pdf.numPages, 5);
+        let extractedText = "";
+
+        for (let i = 1; i <= pageCount; i += 1) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          const pageText = content.items
+            .map((item) => item.str || item.unicode || "")
+            .join(" ");
+          extractedText += `${pageText}\n\n`;
+        }
+
+        const documentText = extractedText.trim();
+        setDocumentText(documentText);
+
+        if (currentUser?.uid) {
+          const textLength = documentText.length;
+          try {
+            await saveDocumentMetadata(currentUser.uid, selectedFile, textLength);
+          } catch (saveError) {
+            console.error("Failed to save PDF metadata:", saveError);
+          }
+        } else {
+          console.warn("No authenticated user available to save PDF metadata.");
+        }
+
+        isDone = true;
+        setProgress(100);
+      } catch (parseError) {
+        console.error("PDF parse error:", parseError);
+        setError(
+          `Unable to read the uploaded PDF. ${parseError?.message || "Please try another file."}`
+        );
+        setProgress(0);
+      } finally {
         clearInterval(interval);
       }
-    }, 200);
-  }
-};
+    }
+  };
 
   return (
     <div className={`file-upload p-6 rounded-xl shadow ${theme === 'dark' ? 'bg-slate-900' : 'bg-white'}`}>
@@ -48,33 +112,29 @@ function FileUpload(props) {
       </label>
       {file && (
         <>
-          <p className="mt-4 text-green-600">
-            Selected: {file.name}
-          </p>
+          <p className="mt-4 text-green-600">Selected: {file.name}</p>
           <div className="mt-4">
-  <p className="mb-2">Uploading... {progress}%</p>
+            <p className="mb-2">Uploading... {progress}%</p>
+            <div className="w-full bg-slate-300 rounded-full h-4">
+              <div
+                className="bg-green-500 h-4 rounded-full transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+          </div>
 
-  <div className="w-full bg-slate-300 rounded-full h-4">
-    <div
-      className="bg-green-500 h-4 rounded-full transition-all duration-300"
-      style={{ width: `${progress}%` }}
-    ></div>
-  </div>
-</div>
+          {error && <p className="mt-3 text-red-500">{error}</p>}
 
-          <p>
-            Size: {(file.size / 1024).toFixed(2)} KB
-          </p>
-
-          <p>
-            Type: {file.type}
-          </p>
+          <p>Size: {(file.size / 1024).toFixed(2)} KB</p>
+          <p>Type: {file.type}</p>
 
           <button
             onClick={() => {
-  setFile(null);
-  setProgress(0);
-}}
+              setFile(null);
+              setProgress(0);
+              setError("");
+              setDocumentText("");
+            }}
             className="mt-3 bg-red-500 text-white px-3 py-1 rounded"
           >
             Remove File

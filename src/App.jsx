@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 
 function App() {
@@ -43,7 +45,17 @@ function App() {
       />
     )}
 
-    {currentPage === "profile" && <Profile />}
+    {currentPage === "profile" && (
+      <Profile setCurrentPage={setCurrentPage} />
+    )}
+
+    {currentPage === "login" && (
+      <Login setCurrentPage={setCurrentPage} />
+    )}
+
+    {currentPage === "signup" && (
+      <Signup setCurrentPage={setCurrentPage} />
+    )}
 
     {currentPage === "settings" && <Settings />}
     {currentPage === "login" && <Login />}

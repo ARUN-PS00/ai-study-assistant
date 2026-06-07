@@ -4,7 +4,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
-import { db } from "../firebase/firebase";
+import { db } from "../firebase/firebase"; // This is correct if firebase/ is next to services/
 
 export const saveChat = async (
   uid,

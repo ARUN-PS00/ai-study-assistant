@@ -34,37 +34,7 @@ function Signup({ setCurrentPage }) {
       setError(err.message || "Signup failed");
     }
   };
-return (
-  <div className="max-w-md mx-auto mt-10 p-6 rounded-xl shadow-lg border">
-    <h2 className="text-2xl font-bold mb-6 text-center">
-      Sign Up
-    </h2>
 
-<<<<<<< HEAD
-    <form onSubmit={handleSignup}>
-        <input
-  type="email"
-  placeholder="Email"
-  value={email}
-  onChange={(e) => setEmail(e.target.value)}
-  className="w-full border rounded-lg p-3 mb-4"
-/>
-
-        <input
-  type="password"
-  placeholder="Password"
-  value={password}
-  onChange={(e) => setPassword(e.target.value)}
-  className="w-full border rounded-lg p-3 mb-4"
-/>
-<button
-  type="submit"
-  className="w-full bg-sky-600 text-white p-3 rounded-lg hover:bg-sky-700"
->
-  Create Account
-</button>
-      </form>
-=======
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-purple-900 via-slate-900 to-emerald-900">
       <div className="w-full max-w-lg p-8 rounded-xl shadow-lg bg-white/10 backdrop-blur border border-white/10">
@@ -75,7 +45,7 @@ return (
         <form onSubmit={handleSignup} className="space-y-4">
           {/* Full Name Field */}
           <div className="flex items-center bg-slate-800/60 rounded">
-            <span className="px-4 text-slate-200">🧑</span>
+            <span className="px-4 text-slate-200">??</span>
             <input
               className="w-full px-4 py-3 rounded-r bg-transparent text-white placeholder-slate-300"
               type="text"
@@ -88,7 +58,7 @@ return (
 
           {/* Email Field */}
           <div className="flex items-center bg-slate-800/60 rounded">
-            <span className="px-4 text-slate-200">👤</span>
+            <span className="px-4 text-slate-200">??</span>
             <input
               className="w-full px-4 py-3 rounded-r bg-transparent text-white placeholder-slate-300"
               type="email"
@@ -101,7 +71,7 @@ return (
 
           {/* Password Field */}
           <div className="flex items-center bg-slate-800/60 rounded">
-            <span className="px-4 text-slate-200">🔒</span>
+            <span className="px-4 text-slate-200">??</span>
             <input
               className="w-full px-4 py-3 rounded-r bg-transparent text-white placeholder-slate-300"
               type="password"
@@ -131,7 +101,6 @@ return (
           </div>
         </form>
       </div>
->>>>>>> feature/backend-firebase
     </div>
   );
 }

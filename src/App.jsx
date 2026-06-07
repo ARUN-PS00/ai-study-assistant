@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 
 
 function App() {
@@ -58,9 +56,6 @@ function App() {
     )}
 
     {currentPage === "settings" && <Settings />}
-    {currentPage === "login" && <Login />}
-
-{currentPage === "signup" && <Signup />}
   </>
 );
 }

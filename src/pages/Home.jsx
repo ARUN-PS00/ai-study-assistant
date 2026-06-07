@@ -1,9 +1,11 @@
-import Navbar from "../components/Navbar";
+import RecentDocuments from "../components/RecentDocuments";
 import FileUpload from "../components/FileUpload";
-import SummaryBox from "../components/SummaryBox";
 import ChatBox from "../components/ChatBox";
+import { useState } from "react";
 
-function Home({ theme, onToggleTheme }) {
+function Home({ theme }) {
+  const [documentText, setDocumentText] = useState("");
+
   return (
     <div
       className={
@@ -12,20 +14,32 @@ function Home({ theme, onToggleTheme }) {
           : "min-h-screen bg-slate-100 text-slate-900"
       }
     >
-      <Navbar theme={theme} onToggleTheme={onToggleTheme} />
-
       <div className="max-w-5xl mx-auto p-6 space-y-6">
-        <div>
-          <h2 className="text-3xl font-bold">AI Study Assistant</h2>
-
-          <p className={theme === "dark" ? "text-slate-300 mt-2" : "text-slate-600 mt-2"}>
-            Upload your notes and learn interactively with AI.
+        {/* Header */}
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+            AI Study Assistant 📚
+          </h1>
+          <p
+            className={
+              theme === "dark"
+                ? "text-slate-300 mt-3"
+                : "text-slate-600 mt-3"
+            }
+          >
+            Upload a PDF and ask AI to summarize, quiz, or explain any content.
           </p>
         </div>
 
-        <FileUpload theme={theme} />
-        <SummaryBox theme={theme} />
-        <ChatBox theme={theme} />
+        {/* File Upload Section */}
+        <FileUpload
+          theme={theme}
+          setDocumentCount={() => {}}
+          setDocumentText={setDocumentText}
+        />
+<RecentDocuments />
+        {/* Chat Interface */}
+        <ChatBox theme={theme} documentText={documentText} />
       </div>
     </div>
   );

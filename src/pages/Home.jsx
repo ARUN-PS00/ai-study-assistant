@@ -1,3 +1,4 @@
+import RecentDocuments from "../components/RecentDocuments";
 import FileUpload from "../components/FileUpload";
 import ChatBox from "../components/ChatBox";
 import { useState } from "react";
@@ -36,7 +37,7 @@ function Home({ theme }) {
           setDocumentCount={() => {}}
           setDocumentText={setDocumentText}
         />
-
+<RecentDocuments />
         {/* Chat Interface */}
         <ChatBox theme={theme} documentText={documentText} />
       </div>

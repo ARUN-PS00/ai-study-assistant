@@ -131,7 +131,7 @@ ${prompt}
       const aiResponse = await askAI(fullPrompt);
 
       // Save chat history securely to Firestore if user is logged in
-      if (auth.currentUser) {
+      if (auth?.currentUser) {
         await saveChat(
           auth.currentUser.uid,
           prompt,

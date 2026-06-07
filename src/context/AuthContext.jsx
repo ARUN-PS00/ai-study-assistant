@@ -8,6 +8,11 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
+    if (!auth) {
+      console.warn("Firebase auth is not initialized. Auth state will remain null.");
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
     });
@@ -16,6 +21,9 @@ export function AuthProvider({ children }) {
   }, []);
 
   const logout = () => {
+    if (!auth) {
+      return Promise.reject(new Error("Firebase auth is not initialized."));
+    }
     return signOut(auth);
   };
 

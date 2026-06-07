@@ -10,7 +10,6 @@ if (!apiKey) {
   console.error("Gemini API key is missing. Set VITE_GEMINI_API_KEY in .env.");
 }
 
-
 const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 
 const getModel = (modelName) => {
@@ -55,9 +54,9 @@ export const askAI = async (message) => {
     }
 
     if (error?.message?.includes("404")) {
-  return "Gemini model configuration is invalid. Check VITE_GEMINI_MODEL.";
-}
+      return "Gemini model configuration is invalid. Check VITE_GEMINI_MODEL.";
+    }
 
-return formatErrorMessage(error);
+    return formatErrorMessage(error);
   }
 };
